@@ -39,6 +39,12 @@ struct airD//сопротивление воздуха
 	double h, p;
 };
 
+double scalar (vec t)
+{
+    double res = sqrt(pow(t.x, 2) + pow(t.y, 2) + pow(t.z, 2));
+    return res;
+}
+
 double airDens(double H)
 {
 	airD air[55];
@@ -70,7 +76,7 @@ double airDens(double H)
 		air[i+1].p = air[i].p + t;
 		air[i+2].p = air[i+1].p + t;
 	}
-	int t;
+	int t = -1;
 	double minH = 1000000000.0;
 	for(int i = 0; i < 52; i++)
 	{
@@ -81,19 +87,22 @@ double airDens(double H)
 		}
 	}
 	double P = air[t].p;
+	if(t == -1)
+        P = 0.0;
 	return P;
 }
 
-/*double tracForce(double engTime, double power)
+vec tracForce(double mLevel, double impulseS, vec v)
 {
-
-}*/
-
-double scalar (vec t)
-{
-    double res = sqrt(pow(t.x, 2) + pow(t.y, 2) + pow(t.z, 2));
-    return res;
+    vec t;
+    double u = scalar(v);
+    t.x = mLevel * impulseS * v.x / u;
+    t.y = mLevel * impulseS * v.y / u;
+    t.z = mLevel * impulseS * v.z / u;
+    return t;
 }
+
+
 vec multi(vec t1, double t2)
 {
     vec res;
@@ -102,19 +111,19 @@ vec multi(vec t1, double t2)
     res.z = t1.z * t2;
     return res;
 }
-vec speed(vec speedFirst, double t, vec position)//как задается t пока не решили!!!
+vec speed(vec speedFirst, double t, vec position, double mLevel, double impulseS )//как задается t пока не решили!!!
 {
 
     vec v;
     double H = scalar (position);
     double scSpeedFirst = scalar(speedFirst);
     double S = size*size;
-    double t1 = tracForce() / scSpeedFirst + airDens(H) * scSpeedFirst / 2.0 * S;
+    double t1 = tracForce(mLevel, impulseS, speedFirst) / scSpeedFirst + airDens(H) * scSpeedFirst / 2.0 * S;
     t1 = 1.0 - t1 * t / mass();
-    vector t2;
+    vec t2;
     double t3 = G * mEarth / pow(H, 3) * t;
     t2 = multi(position, t3);
-    vector t4 = multi(speedFirst, t1);
+    vec t4 = multi(speedFirst, t1);
     t2.x += t4.x;
     t2.y += t4.y;
     t2.z += t4.z;
@@ -194,10 +203,7 @@ vec transformvec (vec v, quat q){ //поворот вектора вокруг 3
 }
 
 //вращение под действием маховиков
-double scalar(vec v){
-    double s = sqrt(pow(v.x, 2) + pow(v.y, 2) + pow(v.z, 2));
-    return s;
-}
+
 vec gravity(vec r, double m){ //r - расстояние до центра Земли
     vec g;
     double R = scalar(r);
@@ -207,14 +213,7 @@ vec gravity(vec r, double m){ //r - расстояние до центра Зе�
     return g;
 }
 
-vec tractive(double mLevel, double impulseS, vec v){
-    vec t;
-    double u = scalar(v);
-    t.x = mLevel * impulseS * v.x / u;
-    t.y = mLevel * impulseS * v.y / u;
-    t.z = mLevel * impulseS * v.z / u;
-    return t;
-}
+
 
 vec aerodynamic(double p, vec v, double S){
     vec a;
