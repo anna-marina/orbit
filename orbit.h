@@ -14,7 +14,7 @@ struct shipPosition
 {
     Position position;
     Orient orientation;
-}
+};
 
 struct ShipParams
 {
@@ -22,13 +22,18 @@ struct ShipParams
     double shipMass;
     rotation maxRotation;
     double maxFuelUsagePerSec;
-    double impulePerFuel;//
-    double impulseFlightPlan[sizeOfArray];
+    double impulsePerFuel;
+    /*double impulseFlightPlan[sizeOfArray];
     rotation rotateFlightPlan[sizeOfArray];
-    shipPosition * position;
-}
+    shipPosition * position; в структуру соответствующей команде*/ 
+};
+
+struct quants
+{
+    int numberOfQuants;
+    double quantSizeOfSec;
+};
 
 double ABC(shipPosition initialPosition,
            ShipParams shipParams,
-           int numberOfQuants,
-           double quantSizeOfSec)
+           quants Quants)
