@@ -29,13 +29,6 @@ struct ShipParams
 }
 
 double ABC(shipPosition initialPosition,
-           double shipEdgeLength,
-           double shipMass,
-           rotation maxRotation,
-           double maxFuelUsagePerSec,
-           double impulePerFuel,
-           double impulseFlightPlan[sizeOfArray],
-           rotation rotateFlightPlan[sizeOfArray],
-           shipPosition * position,
+           ShipParams shipParams,
            int numberOfQuants,
            double quantSizeOfSec)
