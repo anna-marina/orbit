@@ -1,39 +1,55 @@
-const int sizeOfArray = 10000;
+#include <vector>
+
 struct vec
 {
     double x, y, z;
 };
-struct rotation
+
+struct Rotation
 {
     double rotationAroundX, rotationAroundY, rotationAroundZ;
 };
+
 typedef vec Orient;
 typedef vec Position;
-typedef rotation RotationSpeed;
-struct shipPosition
+typedef Rotation RotationSpeed;
+
+struct ShipPosition
 {
     Position position;
     Orient orientation;
+    vec speedFirst;
 };
 
 struct ShipParams
 {
     double shipEdgeLength;
     double shipMass;
-    rotation maxRotation;
+    double fuelMass;
+    Rotation maxRotation;
     double maxFuelUsagePerSec;
     double impulsePerFuel;
-    /*double impulseFlightPlan[sizeOfArray];
-    rotation rotateFlightPlan[sizeOfArray];
-    shipPosition * position; в структуру соответствующей команде*/ 
+    std::vector <double> impulseFlightPlan;
+    std::vector <Rotation> rotateFlightPlan;
 };
 
-struct quants
+struct Quants
 {
     int numberOfQuants;
     double quantSizeOfSec;
 };
 
-double ABC(shipPosition initialPosition,
-           ShipParams shipParams,
-           quants Quants)
+struct ComputeFlightPlan
+{
+    ShipPosition initialPosition;
+    ShipParams shipParams;                                
+    Quants quants;
+};
+struct forVectorPosition
+{
+    int number;
+    int amount;
+    ComputeFlightPlan computeFlightPlan; 
+};
+vector <forVectorPosition> poisition;
+
